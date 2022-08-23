@@ -38,7 +38,7 @@ public class Factura {
     private Cliente cliente;
 
     @OneToMany(mappedBy = "factura", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<DetalleFactura> detalleFactura;
+    private List<DetalleFactura> detallesFacturas;
 
 
     @ManyToOne
@@ -53,11 +53,6 @@ public class Factura {
         return String.format("%06d", id);
     }
 
-    public DetalleFactura agregarDetalleFactura(DetalleFactura detalleFactura) {
-        this.detalleFactura.add(detalleFactura);
-        detalleFactura.setFactura(this);
-        return detalleFactura;
-    }
 
 
 

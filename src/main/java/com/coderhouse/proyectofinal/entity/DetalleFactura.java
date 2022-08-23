@@ -23,14 +23,15 @@ public class DetalleFactura implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name= "nombre_producto")
-    private String nombreProducto;
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name ="detalle_producto_id")
+    private DetalleProducto detalleProducto;
 
     @Column(name= "cantidad")
     private Integer cantidad;
 
-    @Column(name= "precio_unitario")
-    private Double precioUnitario;
+    @Column(name= "total_parcial")
+    private Double totalParcial;
 
     @ManyToOne
     @JoinColumn(name ="factura_id")

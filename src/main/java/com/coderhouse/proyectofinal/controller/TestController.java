@@ -1,28 +1,26 @@
 package com.coderhouse.proyectofinal.controller;
 
-import com.coderhouse.proyectofinal.dto.request.RequestFacturaDto;
-import com.coderhouse.proyectofinal.entity.Factura;
-import com.coderhouse.proyectofinal.service.FacturaService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/test")
+@Slf4j
 public class TestController {
-    private final FacturaService facturaService;
+//    private final TimeApi timeApi;
+//
+//    public TestController(TimeApi timeApi) {
+//        this.timeApi = timeApi;
+//    }
 
-    public TestController(FacturaService facturaService) {
-        this.facturaService = facturaService;
-    }
 
-
-    @GetMapping("/factura")
-    public ResponseEntity<Factura> getFactura(@RequestBody RequestFacturaDto requestFacturaDto) {
-        Factura factura = facturaService.createFactura(requestFacturaDto);
-
-        return ResponseEntity.ok(factura);
-    }
+//    @PostMapping("/time")
+//    public ResponseEntity<Date> getTime() {
+//        Date time = timeApi.getTime();
+//        log.info("time: {}", time);
+//        return ResponseEntity.ok(time);
+//
+//
+//    }
 }
