@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class Cliente {
 
     @Column(name= "fecha_nacimiento")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "America/Argentina/Buenos_Aires")
-    @NotBlank(message = "La fecha de nacimiento es obligatoria")
+    @NotNull(message = "La fecha de nacimiento es obligatoria")
     private LocalDate fechaNacimiento;
 
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)

@@ -1,5 +1,6 @@
 package com.coderhouse.proyectofinal.service;
 
+import com.coderhouse.proyectofinal.dto.ResponseDto;
 import com.coderhouse.proyectofinal.entity.Empresa;
 import com.coderhouse.proyectofinal.exception.DbException;
 import com.coderhouse.proyectofinal.repository.EmpresaRepository;
@@ -25,14 +26,21 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     public Empresa updateEmpresa(Long id, Empresa empresa) {
         Empresa empresaActual = getEmpresaById(id);
-        empresaActual.setNombre(empresa.getNombre());
-        empresaActual.setRubro(empresa.getRubro());
+        if(empresa.getRubro() != null) {
+            empresaActual.setRubro(empresa.getRubro());
+        }
+        if(empresa.getNombre() != null) {
+            empresaActual.setNombre(empresa.getNombre());
+        }
         return empresaRepository.save(empresaActual);
     }
 
-    public String deleteEmpresaById(Long id) {
+    public ResponseDto deleteEmpresaById(Long id) {
         empresaRepository.deleteById(id);
-        return "Empresa eliminada";
+        ResponseDto response =  new ResponseDto();
+        response.setMessage("Empresa eliminada");
+        response.putFieldErrors("id", id.toString());
+        return response;
     }
 
 

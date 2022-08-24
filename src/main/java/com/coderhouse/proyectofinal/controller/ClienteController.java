@@ -1,6 +1,7 @@
 package com.coderhouse.proyectofinal.controller;
 
 import com.coderhouse.proyectofinal.dto.ClienteDto;
+import com.coderhouse.proyectofinal.dto.ResponseDto;
 import com.coderhouse.proyectofinal.entity.Cliente;
 import com.coderhouse.proyectofinal.exception.ErrorResponse;
 import com.coderhouse.proyectofinal.service.ClienteService;
@@ -43,7 +44,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCliente(@PathVariable Long id) {
+    public ResponseDto deleteCliente(@PathVariable Long id) {
         return clienteService.deleteClienteById(id);
     }
 

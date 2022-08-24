@@ -1,5 +1,6 @@
 package com.coderhouse.proyectofinal.controller;
 
+import com.coderhouse.proyectofinal.dto.ResponseDto;
 import com.coderhouse.proyectofinal.entity.Empresa;
 import com.coderhouse.proyectofinal.service.EmpresaService;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class EmpresaController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteEmpresa(@PathVariable Long id) {
+    public ResponseDto deleteEmpresa(@PathVariable Long id) {
         return empresaService.deleteEmpresaById(id);
     }
 

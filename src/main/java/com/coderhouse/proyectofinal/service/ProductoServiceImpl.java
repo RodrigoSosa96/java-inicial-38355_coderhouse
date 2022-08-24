@@ -3,6 +3,7 @@ package com.coderhouse.proyectofinal.service;
 import com.coderhouse.proyectofinal.dto.CheckArrayProductosDto;
 import com.coderhouse.proyectofinal.dto.CheckProductoDto;
 import com.coderhouse.proyectofinal.dto.ProductoUpdateDto;
+import com.coderhouse.proyectofinal.dto.ResponseDto;
 import com.coderhouse.proyectofinal.entity.Producto;
 import com.coderhouse.proyectofinal.exception.DbException;
 import com.coderhouse.proyectofinal.exception.ProductoException;
@@ -41,6 +42,10 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.save(producto);
     }
 
+    public Iterable<Producto> saveProducto(Iterable<Producto> productos) {
+        return productoRepository.saveAll(productos);
+    }
+
     public Producto updateProducto(Long id, Producto producto) {
         Producto productoActual = getProductoById(id);
         if (productoActual == null) {
@@ -59,26 +64,29 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.save(productoActual);
     }
 
-    public String deleteProducto(Long id) {
+    public ResponseDto deleteProducto(Long id) {
         Producto producto = getProductoById(id);
         productoRepository.deleteById(id);
-        return "Producto eliminado: " + producto.getNombre();
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setMessage("Producto eliminado");
+        responseDto.putFieldErrors("producto", producto.getNombre());
+        return responseDto;
     }
-    public String modifyStock(Long id, Integer cantidad, String operacion ) {
+    public Producto modifyStock(Long id, Integer cantidad, String operacion ) {
         Producto producto = getProductoById(id);
         CheckProductoDto productoChecked = checkStock(producto, cantidad, operacion);
         if(productoChecked.getStatus().equals("OK")) {
             producto.setStock(productoChecked.getStock());
             productoRepository.save(producto);
-            return "Stock modificado: " + producto.getNombre() + " - " + producto.getStock();
+            return producto;
+//            return "Stock modificado: " + producto.getNombre() + " - " + producto.getStock();
         } else {
-            return productoChecked.getErrorResponse();
+            throw new ProductoException(productoChecked.getErrorResponse(), null);
         }
     }
 
     public Iterable<Producto> modifyStock(List<ProductoUpdateDto> productoUpdates) {
         CheckArrayProductosDto prod = checkStockArray(productoUpdates);
-        productoRepository.saveAll(prod.getProductos());
         return productoRepository.saveAll(prod.getProductos());
     }
 
@@ -93,18 +101,15 @@ public class ProductoServiceImpl implements ProductoService {
 
         List<String> errorResponseArr = new ArrayList<>();
 
-
+        checkArrayProductos.setStatus("OK");
         for (Producto producto : productos) {
             for (ProductoUpdateDto productoUpdateDto : productosUpdates) {
                 if (Objects.equals(producto.getId(), productoUpdateDto.getId())) {
-
-
                     CheckProductoDto checkedProducto = checkStock(producto, productoUpdateDto.getCantidad(), productoUpdateDto.getOperacion());
 
                     if(checkedProducto.getStatus().equals("OK")) {
 
                         producto.setStock(checkedProducto.getStock());
-                        checkedProducto.setStatus("OK");
 
                     } else {
                         checkArrayProductos.setStatus("ERROR");
@@ -114,8 +119,9 @@ public class ProductoServiceImpl implements ProductoService {
             }
         }
         if(checkArrayProductos.getStatus().equals("ERROR")) {
-            throw new ProductoException(errorResponseArr);
+            throw new ProductoException("Error modificando el stock", errorResponseArr);
         }else {
+            checkArrayProductos.setProductos(productos);
             return checkArrayProductos;
         }
     }
@@ -123,11 +129,13 @@ public class ProductoServiceImpl implements ProductoService {
     public CheckProductoDto checkStock(Producto producto, Integer cantidad, String operacion) {
         CheckProductoDto checkProductoDto = new CheckProductoDto();
         int stockActual = producto.getStock();
-        switch (operacion) {
-            case "sumar":
+        switch (operacion.toUpperCase()) {
+            case "SUMAR":
                 producto.setStock(stockActual + cantidad);
+                checkProductoDto.setStatus("OK");
+
                 break;
-            case "restar":
+            case "RESTAR":
                 if (stockActual >= cantidad) {
                     producto.setStock(stockActual - cantidad);
                     checkProductoDto.setStatus("OK");
@@ -138,6 +146,7 @@ public class ProductoServiceImpl implements ProductoService {
                 break;
             default:
                 checkProductoDto.setErrorResponse("Operacion no valida");
+                checkProductoDto.setStatus("ERROR");
         }
         if (checkProductoDto.getStatus().equals("OK")) {
             checkProductoDto.setStock(producto.getStock());

@@ -1,11 +1,13 @@
 package com.coderhouse.proyectofinal.controller;
 
 import com.coderhouse.proyectofinal.dto.ProductoUpdateDto;
+import com.coderhouse.proyectofinal.dto.ResponseDto;
 import com.coderhouse.proyectofinal.entity.Producto;
 import com.coderhouse.proyectofinal.exception.ErrorResponse;
 import com.coderhouse.proyectofinal.exception.ProductoException;
 import com.coderhouse.proyectofinal.service.ProductoService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,23 +45,23 @@ public class ProductoController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteProducto(@PathVariable(value = "id") Long id) {
+    public ResponseDto deleteProducto(@PathVariable(value = "id") Long id) {
         return productoService.deleteProducto(id);
     }
 
     @PutMapping("/stock/{id}")
-    public String restarStock(@PathVariable(value = "id") Long id, @RequestParam(value = "operacion") String operacion, @RequestParam(value ="valor") Integer valor) {
+    public Producto restarStock(@PathVariable(value = "id") Long id, @RequestParam(value = "operacion") String operacion, @RequestParam(value ="valor") Integer valor) {
         return productoService.modifyStock(id, valor, operacion);
     }
     @PutMapping("/stock")
     public Iterable<Producto> modifyStockBulk(@RequestBody List<ProductoUpdateDto> productosUpdates) {
-        return productoService.modifyStock(productosUpdates);
+        return productoService.saveProducto(productoService.modifyStock(productosUpdates));
     }
 
-
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(ProductoException.class)
     public ErrorResponse handleProductoException(ProductoException ex) {
-        log.info("ProductoException: {}", ex.getCause().getMessage());
+//        log.info("ProductoException: {}", ex.getCause().getMessage());
         return new ErrorResponse(LocalDateTime.now(), ex.getMessage(), null , ex.getErrorResponse());
     }
 

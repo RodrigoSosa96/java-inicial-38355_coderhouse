@@ -1,6 +1,7 @@
 package com.coderhouse.proyectofinal.service;
 
 import com.coderhouse.proyectofinal.dto.ClienteDto;
+import com.coderhouse.proyectofinal.dto.ResponseDto;
 import com.coderhouse.proyectofinal.entity.Cliente;
 import com.coderhouse.proyectofinal.exception.UserNotFoundException;
 import com.coderhouse.proyectofinal.repository.ClienteRepository;
@@ -55,10 +56,13 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteRepository.save(clienteActual);
     }
 
-    public String deleteClienteById(Long id) {
+    public ResponseDto deleteClienteById(Long id) {
         Cliente cliente = getClienteById(id);
         clienteRepository.delete(cliente);
-        return "Cliente con dni '"+ cliente.getDni() +"' eliminado";
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setMessage("Cliente eliminado correctamente");
+        responseDto.putFieldErrors("cliente", cliente.getNombre());
+        return responseDto;
     }
 
     public ClienteDto getEdadCliente(Long id) {

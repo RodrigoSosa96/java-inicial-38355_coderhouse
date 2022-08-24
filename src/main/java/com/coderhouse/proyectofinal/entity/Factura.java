@@ -1,6 +1,8 @@
 package com.coderhouse.proyectofinal.entity;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonPropertyOrder({"numero"})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "referenceList"})
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Factura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +30,7 @@ public class Factura {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "America/Argentina/Buenos_Aires")
     private LocalDateTime fecha;
 
+//    char tipo = 'A';
     @Column(name = "tipo_factura")
     private char tipoFactura = 'A';
 
