@@ -28,5 +28,5 @@ jobs:
       - name: Uploading jar
         uses: actions/upload-artifact@v2
         with:
-          name: myPackage
+          name: java-inicial-38355_coderhouse
           path: myTarget

@@ -69,5 +69,13 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>github packages</name>
+			<url>https://maven.pkg.github.com/RodrigoSosa96/java-inicial-38355_coderhouse</url>
+		</repository>
+	</distributionManagement>
+
 
 </project>
