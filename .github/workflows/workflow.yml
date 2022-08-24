@@ -4,30 +4,39 @@ on:
     branches: [ main ]
 
 jobs:
-  publish:
-    if: github.ref == 'refs/heads/master'
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
         with:
-          java-version: 8
-          settings-path: ".m2/"
-      - uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ secrets.CACHE_VERSION }}
-      - name: Publish package
-        run: mvn $MAVEN_CLI_OPTS clean deploy
+          distribution: 'zulu'
+          java-version: '8'
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
-      - name: Copying target jar
-        run: |
-          mkdir myTarget
-          cp target/*.jar myTarget
-      - name: Uploading jar
-        uses: actions/upload-artifact@v2
-        with:
-          name: java-inicial-38355_coderhouse
-          path: myTarget
+          GITHUB_TOKEN: ${{ github.token }} # GITHUB_TOKEN is the default env for the password
+
+      - name: Set up Apache Maven Central
+        uses: actions/setup-java@v3
+        with: # running setup-java again overwrites the settings.xml
+          distribution: 'zulu'
+          java-version: '8'
+          server-id: maven # Value of the distributionManagement/repository/id field of the pom.xml
+          server-username: MAVEN_USERNAME # env variable for username in deploy
+          server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
+
+      - name: Publish to Apache Maven Central
+        run: mvn deploy
+        env:
+          MAVEN_USERNAME: maven_username123
+          MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
