@@ -28,13 +28,12 @@ public class Empresa {
     @Column(name = "rubro")
     private String rubro;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    @JoinTable(name = "empresa_clientes",
-            joinColumns = @JoinColumn(name = "empresa_id"),
-            inverseJoinColumns = @JoinColumn(name = "cliente_id")
-    )
+
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JsonIgnore
     private Set<Cliente> clientes = new HashSet<>();
+
+
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(name = "empresa_productos",

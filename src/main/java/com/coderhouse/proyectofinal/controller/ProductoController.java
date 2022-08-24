@@ -52,15 +52,17 @@ public class ProductoController {
         return productoService.modifyStock(id, valor, operacion);
     }
     @PutMapping("/stock")
-    public Iterable<Producto> testStock(@RequestBody List<ProductoUpdateDto> productosUpdates) {
-        return productoService.checkStockArray(productosUpdates);
+    public Iterable<Producto> modifyStockBulk(@RequestBody List<ProductoUpdateDto> productosUpdates) {
+        return productoService.modifyStock(productosUpdates);
     }
 
 
     @ExceptionHandler(ProductoException.class)
     public ErrorResponse handleProductoException(ProductoException ex) {
         log.info("ProductoException: {}", ex.getCause().getMessage());
-        return new ErrorResponse(LocalDateTime.now(), ex.getMessage());
+        return new ErrorResponse(LocalDateTime.now(), ex.getMessage(), null , ex.getErrorResponse());
     }
+
+
 
 }

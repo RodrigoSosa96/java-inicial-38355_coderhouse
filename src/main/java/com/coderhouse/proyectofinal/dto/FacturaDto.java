@@ -1,6 +1,5 @@
-package com.coderhouse.proyectofinal.dto.request;
+package com.coderhouse.proyectofinal.dto;
 
-import com.coderhouse.proyectofinal.dto.ProductoUpdateDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestFacturaDto {
+public class FacturaDto {
     @JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Argentina/Buenos_Aires")
     private LocalDateTime fecha = LocalDateTime.now();
     private Long clienteId;

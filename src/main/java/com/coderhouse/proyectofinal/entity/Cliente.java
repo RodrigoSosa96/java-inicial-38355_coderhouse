@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -37,6 +38,7 @@ public class Cliente {
 
     @Column(name= "dni", unique = true)
     @NotBlank(message = "El dni es obligatorio")
+    @Range(min = 10000000, max = 99999999, message = "El dni debe tener 8 dígitos")
     private String dni;
 
     @Column (name = "direccion")
@@ -52,5 +54,9 @@ public class Cliente {
     @JsonIgnore
     private List<Factura> facturas;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id")
+    @JsonIgnore
+    private Empresa empresa;
 
 }

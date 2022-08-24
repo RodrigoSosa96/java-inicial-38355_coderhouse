@@ -2,8 +2,9 @@ package com.coderhouse.proyectofinal.service;
 
 import com.coderhouse.proyectofinal.api.TimeApi;
 import com.coderhouse.proyectofinal.dto.ProductoUpdateDto;
-import com.coderhouse.proyectofinal.dto.request.RequestFacturaDto;
+import com.coderhouse.proyectofinal.dto.FacturaDto;
 import com.coderhouse.proyectofinal.entity.*;
+import com.coderhouse.proyectofinal.exception.DbException;
 import com.coderhouse.proyectofinal.repository.FacturaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,14 +36,16 @@ public class FacturaServiceImpl implements FacturaService {
     }
 
     public Factura getFacturaById(Long id) {
-        return facturaRepository.findById(id).orElse(null);
+        return facturaRepository.findById(id).orElseThrow(() -> new DbException("No se encontró la factura con id: " + id));
     }
 
-    public Factura createFactura(RequestFacturaDto requestFacturaDto) {
-        Cliente cliente = clienteService.getClienteById(requestFacturaDto.getClienteId());
-        Empresa empresa = empresaService.getEmpresaById(requestFacturaDto.getEmpresaId());
+    public Factura createFactura(FacturaDto facturaDto) {
+        Cliente cliente = clienteService.getClienteById(facturaDto.getClienteId());
+        Empresa empresa = empresaService.getEmpresaById(facturaDto.getEmpresaId());
 
-        Iterable<Producto> productos = productoService.getFromIds(requestFacturaDto.getProductosIds());
+        Iterable<Producto> productos = productoService.getFromIds(facturaDto.getProductosIds());
+
+        productoService.checkStockArray(facturaDto.getProductos());
 
         Factura factura = new Factura();
 
@@ -61,7 +64,7 @@ public class FacturaServiceImpl implements FacturaService {
         factura.setCliente(cliente);
         factura.setEmpresa(empresa);
 
-        List<ProductoUpdateDto> productosDto = requestFacturaDto.getProductos();
+        List<ProductoUpdateDto> productosDto = facturaDto.getProductos();
         List<DetalleFactura> detallesFacturas = new ArrayList<>();
 
 

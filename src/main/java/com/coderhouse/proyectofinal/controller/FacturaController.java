@@ -1,13 +1,10 @@
 package com.coderhouse.proyectofinal.controller;
 
-import com.coderhouse.proyectofinal.dto.request.RequestFacturaDto;
+import com.coderhouse.proyectofinal.dto.FacturaDto;
 import com.coderhouse.proyectofinal.entity.Factura;
 import com.coderhouse.proyectofinal.service.FacturaService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/factura")
@@ -18,8 +15,15 @@ public class FacturaController {
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<Factura> getFactura(@RequestBody RequestFacturaDto requestFacturaDto) {
-        Factura factura = facturaService.createFactura(requestFacturaDto);
+    public ResponseEntity<Factura> getFactura(@RequestBody FacturaDto facturaDto) {
+        Factura factura = facturaService.createFactura(facturaDto);
+
+        return ResponseEntity.ok(factura);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Factura> getFactura(@PathVariable Long id) {
+        Factura factura = facturaService.getFacturaById(id);
 
         return ResponseEntity.ok(factura);
     }

@@ -10,7 +10,7 @@ INSERT INTO CLIENTE(nombre, apellido, dni, direccion, fecha_nacimiento) VALUES('
 INSERT INTO CLIENTE(nombre, apellido, dni, direccion, fecha_nacimiento) VALUES('Maria', 'Gonzalez', '30875846', 'Av. Ejercito del Norte 42', '1999-05-02');
 INSERT INTO CLIENTE(nombre, apellido, dni, direccion, fecha_nacimiento) VALUES('Nicolas', 'Soria', '49458746', 'San Martín 445', '2000-11-30');
 
-INSERT INTO empresa_clientes(empresa_id, cliente_id) VALUES(1, 2), (1,1), (2,3);
+-- INSERT INTO empresa_clientes(empresa_id, cliente_id) VALUES(1, 2), (1,1), (2,3);
 
 
 INSERT INTO PRODUCTO(nombre, descripcion, precio, stock) VALUES('Coca-Cola', 'descripcion Coca-Cola', '2.00', 10);

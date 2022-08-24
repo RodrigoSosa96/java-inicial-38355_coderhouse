@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -14,6 +15,7 @@ public class ErrorResponse {
     private LocalDateTime timestamp;
     private String message;
     private Map<String, String> fieldErrors;
+    private List<String> arrayErrors;
 
     public ErrorResponse(LocalDateTime timestamp, String message) {
         this.timestamp = timestamp;
@@ -23,5 +25,11 @@ public class ErrorResponse {
         this.timestamp = timestamp;
         this.message = message;
         this.fieldErrors = fieldErrors;
+    }
+    public ErrorResponse(LocalDateTime timestamp, String message,Map<String, String> fieldErrors, List<String> arrayErrors) {
+        this.timestamp = timestamp;
+        this.message = message;
+        this.fieldErrors = fieldErrors;
+        this.arrayErrors = arrayErrors;
     }
 }
