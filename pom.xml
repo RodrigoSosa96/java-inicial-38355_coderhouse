@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.coderhouse</groupId>
-	<artifactId>ProyectoFinal</artifactId>
+	<artifactId>proyecto-final</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ProyectoFinal</name>
 	<description>Proyecto Final para CoderHouse</description>
