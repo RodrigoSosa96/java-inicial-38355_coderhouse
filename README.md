@@ -4,4 +4,4 @@ Para descargar el proyecto ve a la sección packages, o haciendo click [aquí][1
 
 
 
-[1]:https://github.com/RodrigoSosa96/java-inicial-38355_coderhouse/packages/1611574
+[1]:https://github.com/RodrigoSosa96/java_proyecto-final/packages/1611574
